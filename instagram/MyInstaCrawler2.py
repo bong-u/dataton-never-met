@@ -4,10 +4,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from time import sleep, time
 from bs4 import BeautifulSoup
+from getpass import getpass
 
 
-email = input('email?')
-pwd = input('passwd?')
+email = getpass('id : ')
+pwd = getpass('passwd : ')
+query = input('query : ')
 
 BASE_URL = 'https://www.instagram.com/'
 SEARCH_URL = BASE_URL + 'explore/tags/'
@@ -40,30 +42,43 @@ def search(query):
 
 def crawl():
 
-    first = driver.find_element_by_css_selector('div._9AhH0')
-    first.click()
-    sleep(1)
-
-    with open('result.txt', 'w') as file:
+    dateList = ''
     
-        for i in range(100):
-            soup = BeautifulSoup(driver.page_source, 'lxml')
-
-
-            date = WebDriverWait(driver, 5).until(
-                EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, 'time._1o9PC.Nzb55'))).get_attribute("datetime")[:10]
-
-            print (date)
-            file.write(date + '\n')
+    for i in range(10):
+        '''
+        WebDriverWait(driver, 1).until(
+            EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, 'img.FFVAD')))
+        '''
         
-            right = driver.find_element_by_css_selector ('a.coreSpriteRightPaginationArrow')
-            right.click()
+        imgList = driver.find_elements_by_css_selector('img.FFVAD')
+
+        for j in range(len(imgList)):
+            string = str(imgList[j].get_attribute('alt'))
+
+            if not string.startswith('Photo by'):
+                continue
+
+            if ' on' not in string:
+                continue
+
+            date = string.split(' on ')[1].split('.')[0]
+            print(date)
+            dateList += date + '\n'
+        
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        sleep(0.1)
+
+    f = open('result.txt', 'w')
+    f.write(dateList)
 
 
 start = time()
+
 login()
-search('치킨')
+search(query)
 crawl()
+driver.close()
 
 print (time() - start)
