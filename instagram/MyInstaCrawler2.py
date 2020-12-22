@@ -15,7 +15,7 @@ BASE_URL = 'https://www.instagram.com/'
 SEARCH_URL = BASE_URL + 'explore/tags/'
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu") 
 options.add_argument("disable-infobars")
@@ -43,8 +43,9 @@ def search(query):
 def crawl():
 
     dateList = ''
+    srcList = []
     
-    for i in range(10):
+    for i in range(50):
         '''
         WebDriverWait(driver, 1).until(
             EC.presence_of_element_located(
@@ -54,21 +55,27 @@ def crawl():
         imgList = driver.find_elements_by_css_selector('img.FFVAD')
 
         for j in range(len(imgList)):
-            string = str(imgList[j].get_attribute('alt'))
+            alt = str(imgList[j].get_attribute('alt'))
+            src = str(imgList[j].get_attribute('src'))
 
-            if not string.startswith('Photo by'):
+            if src in srcList:
                 continue
 
-            if ' on' not in string:
+            if not alt.startswith('Photo by'):
                 continue
 
-            date = string.split(' on ')[1].split('.')[0]
+            if ' on ' not in alt:
+                continue
+
+            #date = alt.split(' on ')[1]
+            date = alt.split(' on ')[1].split('.')[0]
             print(date)
             dateList += date + '\n'
+            srcList.append(src)
         
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-        sleep(0.1)
+        sleep(1.0)
 
     f = open('result.txt', 'w')
     f.write(dateList)
