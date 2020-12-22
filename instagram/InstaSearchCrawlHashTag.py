@@ -4,16 +4,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from time import sleep, time
 from bs4 import BeautifulSoup
+import re
 
 
-email = input('email?')
+email = input('id?')
 pwd = input('passwd?')
+query = input('query?')
 
 BASE_URL = 'https://www.instagram.com/'
 SEARCH_URL = BASE_URL + 'explore/tags/'
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu") 
 options.add_argument("disable-infobars")
@@ -36,34 +38,52 @@ def login():
 
 def search(query):
     driver.get(SEARCH_URL + query)
-    sleep(2.5)
+    #sleep(2.5)
 
 def crawl():
 
-    first = driver.find_element_by_css_selector('div._9AhH0')
+    open('hashtag.txt', 'w')
+
+    #first = driver.find_element_by_css_selector('div._9AhH0')
+    first = WebDriverWait(driver, 5).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, 'div._9AhH0')))
     first.click()
     sleep(1)
 
-    with open('result.txt', 'w') as file:
-    
-        for i in range(100):
-            soup = BeautifulSoup(driver.page_source, 'lxml')
 
+    for i in range(5000):
 
-            date = WebDriverWait(driver, 5).until(
+        line = ''
+        for j in range(10):
+
+            content = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, 'time._1o9PC.Nzb55'))).get_attribute("datetime")[:10]
+                    (By.CSS_SELECTOR, '.C7I1f'))).text
 
-            print (date)
-            file.write(date + '\n')
+            tags = re.findall('#[A-Za-z0-9가-힣]+', content)
+
+            for tag in tags:
+                line += tag.replace ("#", "") + ' '
         
             right = driver.find_element_by_css_selector ('a.coreSpriteRightPaginationArrow')
             right.click()
 
+        date = WebDriverWait(driver, 5).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, 'time'))).get_attribute("datetime")
+
+        print(date)
+
+        with open("hashtag.txt", 'a') as f:
+            f.write(line)
+            f.write('\n' + date + '\n')
+        print (line)
+
 
 start = time()
 login()
-search('치킨')
+search(query)
 crawl()
 
 print (time() - start)
