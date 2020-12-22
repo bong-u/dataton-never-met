@@ -38,13 +38,11 @@ def login():
 
 def search(query):
     driver.get(SEARCH_URL + query)
-    #sleep(2.5)
 
 def crawl():
 
     open('hashtag.txt', 'w')
 
-    #first = driver.find_element_by_css_selector('div._9AhH0')
     first = WebDriverWait(driver, 5).until(
                 EC.visibility_of_element_located(
                     (By.CSS_SELECTOR, 'div._9AhH0')))
