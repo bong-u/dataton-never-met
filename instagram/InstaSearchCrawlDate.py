@@ -15,7 +15,7 @@ BASE_URL = 'https://www.instagram.com/'
 SEARCH_URL = BASE_URL + 'explore/tags/'
 
 options = webdriver.ChromeOptions()
-#options.add_argument('headless')
+options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu") 
 options.add_argument("disable-infobars")
@@ -38,7 +38,7 @@ def login():
 
 def search(query):
     driver.get(SEARCH_URL + query)          #query를 검색한 사이트로 이동
-    sleep(2.5)                              #로
+    sleep(2.5)                              #로딩
 
 def crawl():
 
