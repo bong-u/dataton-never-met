@@ -1,11 +1,7 @@
 # -*-coding:utf-8-*-
 from bs4 import BeautifulSoup
 import requests
-import sys
-import io
-
-sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
+\
 
 
 class movie_data:
@@ -45,6 +41,7 @@ title_list = soup.select("#table > tbody > tr > td > a > span")
 date_list = soup.select("#table > tbody > tr > td:nth-child(4)")
 offline_list = soup.select("#table > tbody > tr > td:nth-child(10)")
 online_list = soup.select("#table > tbody > tr > td:nth-child(11)")
+
 #2020년 기준 조회 영화 추가
 for i in range(len(title_list)):
     marker = 0
