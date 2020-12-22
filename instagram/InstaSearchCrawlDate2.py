@@ -4,18 +4,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from time import sleep, time
 from bs4 import BeautifulSoup
-from getpass import getpass
 
-
-email = getpass('id : ')
-pwd = getpass('passwd : ')
+email = input('id : ')
+pwd = input('passwd : ')
 query = input('query : ')
 
 BASE_URL = 'https://www.instagram.com/'
 SEARCH_URL = BASE_URL + 'explore/tags/'
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu") 
 options.add_argument("disable-infobars")
@@ -45,38 +43,19 @@ def crawl():
     srcList = []            #중복 방지 리스트
 
     open('result.txt', 'w') #result file clear
+
     
     for i in range(30000):      #대충 스크롤 30000번 하겠다는 뜻
-        imgList = driver.find_elements_by_css_selector('img.FFVAD') #find img by selector
-        
-        dateList = ''
 
-        for j in range(len(imgList)):
-            alt = str(imgList[j].get_attribute('alt'))  #날짜가 포함된 alt
-            src = str(imgList[j].get_attribute('src'))  #중복을 방지하기 위한 src
+        for j in range(10):
+            
+            sleep(1.0)          #로딩 기다려주기
+            
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")    #스크롤
 
-            if src in srcList:                  #중복되는게 있으면 pass
-                continue
-
-            if not alt.startswith('Photo by'):  #사진에 날짜가 없으면 pass (이런경우 잘 없음)
-                continue
-
-            if ' on ' not in alt:               #사진에 날짜가 없으면 pass (이런경우 잘 없음)
-                continue
-
-            date = alt.split(' on ')[1].split('.')[0]       #날짜 부분만 추출
-            print(date)                                     #날짜 출력
-            dateList += date + '\n'                         #dateList에 추가
-            srcList.append(src)                             #중복방지 리스트에 추가
-
-
-        with open('result.txt', 'a') as f:      #파일에 기록
-            f.write(dateList)
-        
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")    #스크롤
-
-        sleep(1.0)          #로딩 기다려주기
-
+            
+        alt = driver.find_element_by_xpath("(//img[@class='FFVAD'])[last()]").get_attribute('alt')
+        print (alt)
 
 
 start = time()
