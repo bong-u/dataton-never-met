@@ -11,7 +11,7 @@
 
 # 데이터 출처 정리
 * 영화 데이터 출처 : KOBIS(영화관입장권통합전산망)
-* 코로나 확진자 수 출처 : 오픈 API(보건복지부_코로나19감염_현황) + "수빈이가 조사한 데이터"
+* 코로나 확진자 수 출처 : 오픈 API;보건복지부_코로나19감염_현황(https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15043376) + "코로나보드(https://coronaboard.kr/)"
 * 인스타 키워드 데이터 출처 : 인스타그램
 
 
