@@ -20,7 +20,9 @@
 * 코로나 확진자 수 출처 : 오픈 API;보건복지부_코로나19감염_현황(https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15043376) + "코로나보드(https://coronaboard.kr/)"
 * 인스타 키워드 데이터 출처 : "https://www.instagram.com/"
 
-
+------------
+### 추가
+* 보고서, 발표자료, 소스코드 모두 최종제출자료 폴더 안에 들어있습니다.
 
 
 
